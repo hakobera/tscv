@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Markdown Rendering via GitHub API</title>
+  <script src="/js/shCore.js"></script>
+  <script src="/js/shBrushJScript.js"></script>
+  <link href="/css/shCore.css" rel="stylesheet" type="text/css" />
+  <link href="/css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+  window.onload = function () {
+    var socket = io.connect();
+    socket.on('connect', function() {
+      socket.on('update', function(data) {
+        var html = '<p style="padding-left: 10px;">src = ' + data.file + '</p><pre id="content" class="brush: js">' + data.data + '</pre>';
+        document.body.innerHTML = html;
+        SyntaxHighlighter.highlight();
+      });
+
+      socket.on('err', function(err) {
+        var html = '<p style="color: red">' + err.message + '</p>';
+        document.body.innerHTML = html;
+      });
+    });
+  };
+  SyntaxHighlighter.config.clipboardSwf = 'js/clipboard.swf';
+  </script>
+  <style type="text/css">body { margin: 0; padding: 0; }</style>
+</head>
+<body>
+</body>
+</html>
